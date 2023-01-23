@@ -1,20 +1,51 @@
-{% extends 'admin_base.html' %} 
+{% extends 'admin_base.html' %}
 
-{% block title %} 
-Pepův Blog | Úprava článku {{ article.title }} 
-{% endblock %} 
+{% block title %}
+Pepův Blog | Úprava článku {{ article.title }}
+{% endblock %}
 
 {% block admin_body %}
-<form class="edit grid grid-cols-2 items-top gap-5 p-5" method="post">
-    <label>Název:</label>
-    <input name="title" class="border-emerald-500 border-2" value="{{article.title}}"/>
-    <label>Autor:</label>
-    <select>
-      <option></option>
-    </select>
-    <label class="col-span-2">Obsah:</label>
-  <textarea name="content" class="col-span-2 h-72 border-emerald-500 border-2 w-full" style="min-height: 250px;">{{article.content}}</textarea>
-  <input type="submit" class=" bg-emerald-400 text-white p-2 rounded-md cursor-pointer hover:bg-emerald-500" value="Uložit" />
-  <button class="text-center bg-red-400 text-white p-2 rounded-md cursor-pointer hover:bg-red-500" id="cancel">Zrušit</button>
+<form class="grid grid-cols-2 items-top gap-5 p-5" method="post">
+  <label>Název:</label>
+  {% if article.title!=None %}
+  <input name="title" class="border-emerald-500 border-2" value="{{article.title}}" required />
+  {% else %}
+  <input name="title" class="border-emerald-500 border-2" required />
+  {% endif %}
+  <label>Autor:</label>
+  <select name="author_id" class="border-emerald-500 border-2 px-2 bg-white">
+    {% for user in users %}
+    <option value="{{ user.id }}">{{ user.login }}</option>
+    {% endfor %}
+  </select>
+  <label class="col-span-2">Obsah:</label>
+  <div class="col-span-2">
+  {% if article.content != None %}
+  <textarea id="editor" name="content" class="col-span-2 h-72 border-emerald-500 border-2 w-full"
+    style="min-height: 250px;">{{article.content}}</textarea>
+    {% else %}
+    <textarea id="editor" name="content" class="col-span-2 h-72 border-emerald-500 border-2 w-full"
+    style="min-height: 250px;"></textarea>
+    {% endif %}
+  </div>
+  <input type="submit" class=" bg-emerald-400 text-white p-2 rounded-md cursor-pointer hover:bg-emerald-500"
+    value="Uložit" />
+  <button class="text-center bg-red-400 text-white p-2 rounded-md cursor-pointer hover:bg-red-500"
+    id="cancel">Zrušit</button>
 </form>
+<script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+<script type="text/javascript">
+    tinymce.init({
+        selector: "textarea[name=content]",
+        plugins: [
+            "advlist autolink lists link image charmap print preview anchor",
+            "searchreplace visualblocks code fullscreen",
+            "insertdatetime media table contextmenu paste"
+        ],
+        toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image",
+        entities: "160,nbsp",
+        entity_encoding: "named",
+        entity_encoding: "raw"
+    });
+</script>
 {% endblock %}

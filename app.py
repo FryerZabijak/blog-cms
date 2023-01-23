@@ -57,7 +57,7 @@ class User(db.Model):
 
 @app.route("/")
 def index():
-    articles = Article.query.all()
+    articles = Article.query.order_by(desc(Article.id)).all()
     return render_template("index.html",articles=articles)
 
 @app.route("/article/<int:id>")
@@ -92,7 +92,7 @@ def admin_login():
 
         if user:
             login_user(user)
-            user.is_authenticated = True
+            #user.is_authenticated = True
             return redirect("/admin/articles")
         else:
             warning="Špatné přihlašovací údaje."
@@ -131,14 +131,24 @@ def delete_article(id):
     db.session.commit()
     return redirect("/admin")
 
-@app.route("/admin/article/edit=<int:id>", methods=["GET","POST"])
+@app.route("/admin/article/edit/<int:id>", methods=["GET","POST"])
+@app.route("/admin/article/edit", methods=["GET","POST"])
 @login_required
-def edit_article(id):
-    article = Article.query.filter_by(id=id).first()
+def edit_article(id=None):
+    if id:
+        article = Article.query.filter_by(id=id).first()
+    else:
+        article = Article()
+    users = User.query.all()
     if request.method == 'GET':
-        return render_template("admin_article_edit.html",article=article)
+        return render_template("admin_article_edit.html",article=article,users=users)
     elif request.method == "POST":
         article.title = request.form.get("title")
         article.content = request.form.get("content")
-        db.session.commit()
+        article.author_id = request.form.get("author_id")
+        if id:
+            db.session.commit()
+        else:
+            db.session.add(article)
+            db.session.commit()
         return redirect("/admin/articles")
