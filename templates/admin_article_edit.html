@@ -1,16 +1,20 @@
 {% extends 'admin_base.html' %} 
 
 {% block title %} 
-Pepův Blog | Úprava článku {{article.title }} 
+Pepův Blog | Úprava článku {{ article.title }} 
 {% endblock %} 
 
 {% block admin_body %}
-<div class="edit grid grid-cols-2 items-top gap-5 p-5">
+<form class="edit grid grid-cols-2 items-top gap-5 p-5" method="post">
     <label>Název:</label>
-    <input name="title" class="border-emerald-500 border-2" />
+    <input name="title" class="border-emerald-500 border-2" value="{{article.title}}"/>
+    <label>Autor:</label>
+    <select>
+      <option></option>
+    </select>
     <label class="col-span-2">Obsah:</label>
-  <textarea name="content" class="col-span-2 h-72 border-emerald-500 border-2 w-full"></textarea>
-  <input type="submit" class="bg-emerald-400 text-white p-2 rounded-md cursor-pointer hover:bg-emerald-500" value="Uložit" />
-  <input type="submit" class="bg-red-400 text-white p-2 rounded-md cursor-pointer hover:bg-red-500" value="Zrušit" />
-</div>
+  <textarea name="content" class="col-span-2 h-72 border-emerald-500 border-2 w-full" style="min-height: 250px;">{{article.content}}</textarea>
+  <input type="submit" class=" bg-emerald-400 text-white p-2 rounded-md cursor-pointer hover:bg-emerald-500" value="Uložit" />
+  <button class="text-center bg-red-400 text-white p-2 rounded-md cursor-pointer hover:bg-red-500" id="cancel">Zrušit</button>
+</form>
 {% endblock %}

@@ -114,7 +114,8 @@ def admin_articles():
 @app.route("/admin/users")
 @login_required
 def admin_users():
-    return render_template("index.html")
+    users = User.query.all()
+    return render_template("admin_users.html", users=users)
 
 @app.route("/admin/logout")
 @login_required
@@ -130,8 +131,14 @@ def delete_article(id):
     db.session.commit()
     return redirect("/admin")
 
-@app.route("/admin/article/edit=<int:id>")
+@app.route("/admin/article/edit=<int:id>", methods=["GET","POST"])
 @login_required
 def edit_article(id):
     article = Article.query.filter_by(id=id).first()
-    return render_template("admin_article_edit.html",article=article)
+    if request.method == 'GET':
+        return render_template("admin_article_edit.html",article=article)
+    elif request.method == "POST":
+        article.title = request.form.get("title")
+        article.content = request.form.get("content")
+        db.session.commit()
+        return redirect("/admin/articles")

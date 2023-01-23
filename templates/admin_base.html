@@ -4,6 +4,7 @@
 <script src="{{ url_for('static',filename='js/delete.js') }}" defer></script>
 <script src="{{ url_for('static',filename='js/show.js') }}" defer></script>
 <script src="{{ url_for('static',filename='js/edit.js') }}" defer></script>
+<script src="{{ url_for('static',filename='js/cancel.js') }}" defer></script>
 
 <style>
   main {
@@ -41,7 +42,12 @@
     Odhlásit se
   </button>
   <a
-    class="hover:text-gray-900"
+    class="hover:text-gray-900 mt-4"
+    href="{{ url_for('admin_articles') }}"
+    >Články</a
+  >
+  <a
+    class="hover:text-gray-900 mt-4"
     href="{{ url_for('admin_users') }}"
     >Uživatelé</a
   >

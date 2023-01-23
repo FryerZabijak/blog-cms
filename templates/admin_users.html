@@ -1,0 +1,29 @@
+{% extends 'admin_base.html' %} 
+
+{% block title %} Pepův Blog | Uživatelé {% endblock %} 
+
+{% block admin_body %}
+<table class="table-auto w-1/2 m-auto">
+    <thead>
+        <th class="px-4 py-2 text-center">ID</th>
+        <th class="px-4 py-2 text-center">Jméno</th>
+        <th class="px-4 py-2 text-center">Práva</th>
+    </thead>
+    <tbody>
+        {% for user in users %}
+      <tr class="text-center">
+        <td class="border px-4 py-2">{{user.id}}</td>
+        <td class="border px-4 py-2">{{user.login}}</td>
+        {% if user.admin %}
+        <td class="border px-4 py-2">Admin</td>
+        {% else %}
+        <td class="border px-4 py-2">Uživatel</td>
+        {% endif %}
+    </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <div class="w-full flex justify-center p-4 px-36">
+    <button id="create_user" class="bg-emerald-400 w-1/2 text-white rounded-md p-2 text-center hover:bg-emerald-600">Vytvořit</button>
+    </div>
+{% endblock %}
