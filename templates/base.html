@@ -9,6 +9,7 @@
       href="{{ url_for('static',filename='css/output.css') }}"
     />
     <title>{% block title %} {% endblock %}</title>
+    {% block head %}{% endblock %}
   </head>
   <body>
     <header class="bg-red-500 text-white p-4 flex items-center justify-between">

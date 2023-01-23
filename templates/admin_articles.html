@@ -1,0 +1,47 @@
+{% extends 'admin_base.html' %} 
+
+{% block title %} Pepův Blog | Administrace články {% endblock %} 
+
+{% block head %}
+<script src="{{ url_for('static',filename='js/logout.js') }}" defer></script>
+{% endblock %} 
+
+{% block admin_body %}
+<h2 class="text-xl font-medium mb-2 text-center">Všechny články</h2>
+<table class="table-auto w-full">
+  <thead>
+    <th class="px-4 py-2 text-left">ID</th>
+    <th class="px-4 py-2 text-left">Název</th>
+    <th class="px-4 py-2 text-left">Autor</th>
+    <th class="px-4 py-2 text-left">Zhlédnutí</th>
+    <th class="px-4 py-2 text-left">Ovládání</th>
+  </thead>
+  <tbody>
+    {% for article in articles %}
+    <tr class="text-center">
+      <td class="border px-4 py-2">{{article.id}}</td>
+      <td class="border px-4 py-2">{{article.title}}</td>
+      <td class="border px-4 py-2">{{article.author}}</td>
+      <td class="border px-4 py-2">{{article.views}}</td>
+      <td class="border px-1 py-2">
+        <button
+          class="bg-red-500 text-white py-1 px-2 rounded-sm hover:bg-red-600"
+        >
+          Smazat
+        </button>
+        <button
+          class="bg-blue-500 text-white py-1 px-2 rounded-sm hover:bg-blue-600"
+        >
+          Upravit
+        </button>
+        <button
+          class="bg-green-500 text-white py-1 px-2 rounded-sm hover:bg-green-600"
+        >
+          Zobrazit
+        </button>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

@@ -14,7 +14,7 @@ class Article(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String, nullable=False)
     content = db.Column(db.String, nullable=False)
-    author = db.Column(db.String, nullable=False)
+    author_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     date_created = db.Column(db.DateTime, default=datetime.utcnow)
     views = db.Column(db.Integer, default=0)
 
@@ -25,23 +25,30 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     login = db.Column(db.String, nullable=False)
     password = db.Column(db.String, nullable=False)
-    admin = db.Column(db.Integer, default=0)
+    admin = db.Column(db.Boolean, default=0)
+    articles = db.relationship('Article', backref='author', lazy=True)
 
     def __repr__(self):
         return "<User %r>" % self.id
 
 app.app_context().push()
 db.create_all()
-adminUser = User(login="Pepa",password="heslo",admin=1)
-adminUser2 = User(login="Pepo",password="heslo",admin=0)
+adminUser = User(login="Pepa",password="heslo",admin=True)
 db.session.add(adminUser)
+adminUser2 = User(login="Pepo",password="heslo",admin=False)
 db.session.add(adminUser2)
+
+article1 = Article(title="Nejlepší článek o programování",content="Kontekt bla bla",author=1)
+db.session.add(article1)
+article2 = Article(title="Nejhorší článek o programování",content="Kontekt bla bla",author=1)
+db.session.add(article2)
 db.session.commit()
 
 
 @app.route("/")
 def index():
-    return render_template("index.html")
+    articles = Article.query.all()
+    return render_template("index.html",articles=articles)
 
 
 @app.route("/about")
@@ -54,7 +61,7 @@ def index():
 def about():
     return render_template("about.html")
 
-@app.route("/admin-login", methods=["GET", "POST"])
+@app.route("/admin/login", methods=["GET", "POST"])
 def admin_login():
 
     if request.method == "POST":
@@ -65,21 +72,33 @@ def admin_login():
 
         if user:
             session["user_id"]=user.id
-            return redirect("/admin-articles")
+            return redirect("/admin/articles")
         else:
             warning="Uživatel nebyl nalezen."
 
 
-        return render_template("admin-login.html",warning=warning)
+        return render_template("admin_login.html",warning=warning)
     else:
         if "user_id" in session:
-            return redirect("/admin-articles")
+            return redirect("/admin/articles")
         else:
-            return render_template("admin-login.html")
+            return render_template("admin_login.html")
 
-@app.route("/admin-articles")
+@app.route("/admin/articles")
 def admin_articles():
     if "user_id" not in session:
-        return redirect("/admin-login")
+        return redirect("/admin/login")
 
-    return render_template("admin-articles.html")
+    user = User.query.filter_by(id=session["user_id"]).first()
+    articles = Article.query.all()
+
+    return render_template("admin_articles.html", user=user, articles=articles)
+
+@app.route("/admin/users")
+def admin_users():
+    return render_template("index.html")
+
+@app.route("/admin/logout")
+def admin_logout():
+    session.pop('user_id', None)
+    return redirect("/admin/login")

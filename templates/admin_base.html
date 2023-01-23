@@ -1,0 +1,43 @@
+{%extends 'base.html'%}
+{% block body %}
+<aside class="bg-slate-400 h-auto w-auto shadow-2xl text-white p-1 font-medium">
+  <label class="text-xl">{{ user.login }}</label>
+  {% if user.admin==1 %}
+  <label class="text-gray-200">Admin</label>
+  {% else %}
+  <label>Uživatel</label>
+  {% endif %}
+  <button
+    class="bg-yellow-500 hover:bg-yellow-400 p-1 shadow-lg rounded-lg"
+    id="logout"
+  >
+    Odhlásit se
+  </button>
+  <a
+    class="text-gray-300 hover:text-gray-100"
+    href="{{ url_for('admin_users') }}"
+    >Uživatelé</a
+  >
+</aside>
+<div class="administration"> {% block admin_body %} {% endblock %}</div>
+<style>
+  main {
+    display: flex;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+  aside {
+    flex-grow: 1;
+    min-width: 100px;
+    max-width: 200px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: center;
+  }
+  .administration {
+    flex-grow: 5;
+  }
+</style>
+{% endblock %}
