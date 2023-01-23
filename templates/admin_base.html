@@ -4,6 +4,27 @@
 <script src="{{ url_for('static',filename='js/delete.js') }}" defer></script>
 <script src="{{ url_for('static',filename='js/show.js') }}" defer></script>
 <script src="{{ url_for('static',filename='js/edit.js') }}" defer></script>
+
+<style>
+  main {
+    display:flex;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+  aside {
+    min-width: 140px;
+    width:50%;
+    max-width: 200px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: center;
+  }
+  .administration {
+    width: 100%;
+  }
+</style>
 {% endblock %} 
 {% block body %}
 <aside class="bg-emerald-400 h-auto w-auto shadow-2xl p-1 font-medium text-gray-700">
@@ -26,24 +47,4 @@
   >
 </aside>
 <div class="administration"> {% block admin_body %} {% endblock %}</div>
-<style>
-  main {
-    display:flex;
-    padding: 0 !important;
-    margin: 0 !important;
-  }
-  aside {
-    min-width: 140px;
-    width:50%;
-    max-width: 200px;
-
-    display: flex;
-    flex-direction: column;
-    justify-content: start;
-    align-items: center;
-  }
-  .administration {
-    width: 100%;
-  }
-</style>
 {% endblock %}

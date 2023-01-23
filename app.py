@@ -1,5 +1,6 @@
 from flask import Flask, render_template, url_for, request, redirect, session
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import desc
 from datetime import datetime
 from flask_login import LoginManager, UserMixin, login_user, current_user, login_required, logout_user
 
@@ -25,6 +26,7 @@ class Article(db.Model):
     author_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     date_created = db.Column(db.DateTime, default=datetime.utcnow)
     views = db.Column(db.Integer, default=0)
+    reviews = db.Column(db.Integer, default=0)
 
     def __repr__(self):
         return "<Article %r>" % self.id
@@ -52,22 +54,6 @@ class User(db.Model):
 
     def __repr__(self):
         return "<User %r>" % self.id
-
-
-
-# app.app_context().push()
-# db.create_all()
-# adminUser = User(login="Pepa",password="heslo",admin=True)
-# db.session.add(adminUser)
-# adminUser2 = User(login="Pepo",password="heslo",admin=False)
-# db.session.add(adminUser2)
-# 
-# article1 = Article(title="Nejlepší článek o programování",content="Kontekt bla bla",author=1)
-# db.session.add(article1)
-# article2 = Article(title="Nejhorší článek o programování",content="Kontekt bla bla",author=1)
-# db.session.add(article2)
-# db.session.commit()
-
 
 @app.route("/")
 def index():
@@ -122,7 +108,7 @@ def admin_login():
 @app.route("/admin/articles")
 @login_required
 def admin_articles():
-    articles = Article.query.all()
+    articles = Article.query.order_by(desc(Article.id)).all()
     return render_template("admin_articles.html", articles=articles)
 
 @app.route("/admin/users")

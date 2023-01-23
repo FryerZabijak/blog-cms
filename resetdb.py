@@ -3,6 +3,7 @@ import json
 from time import sleep
 
 app.app_context().push()
+db.drop_all()
 db.create_all()
 user = User(login="Pepa",password="heslo",admin=True)
 db.session.add(user)

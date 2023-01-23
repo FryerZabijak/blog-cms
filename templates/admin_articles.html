@@ -10,6 +10,7 @@
     <th class="px-4 py-2 text-left">Název</th>
     <th class="px-4 py-2 text-left">Autor</th>
     <th class="px-4 py-2 text-left">Zhlédnutí</th>
+    <th class="px-4 py-2 text-left">Hodnocení</th>
     <th class="px-4 py-2 text-left">Ovládání</th>
   </thead>
   <tbody>
@@ -19,6 +20,7 @@
       <td class="border px-4 py-2">{{article.title}}</td>
       <td class="border px-4 py-2">{{article.author.login}}</td>
       <td class="border px-4 py-2">{{article.views}}</td>
+      <td class="border px-4 py-2">{{article.reviews}}</td>
       <td class="border px-1 py-2">
         <button id="delete" article-id="{{article.id}}"
           class="bg-red-500 text-white py-1 px-2 rounded-sm hover:bg-red-600"
@@ -40,4 +42,7 @@
     {% endfor %}
   </tbody>
 </table>
+<div class="w-full flex justify-center p-4 px-36">
+<button id="create" class="bg-emerald-400 w-1/2 text-white rounded-md p-2 text-center hover:bg-emerald-600">Vytvořit</button>
+</div>
 {% endblock %}
