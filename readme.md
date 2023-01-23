@@ -5,9 +5,16 @@ Tento projekt je implementací blogu s administrací pomocí Python Backend Fram
 ## Instalace
 
 1. Stáhněte si nebo naklonujte tento repozitář
-2. Nainstalujte potřebné knihovny pomocí `pip install -r requirements.txt`
-3. Vytvořte a nakonfigurujte databázi (v souboru `config.py`)
-4. Spusťte server pomocí `python app.py`
+2. Spusťte server pomocí `flask run` (pro debug přidejte `--debug`)
+
+### Knihovny
+
+1. flask_sqlalchemy
+2. flask_login
+
+### Styly
+
+1. Spusťte watch Tailwind CSS stylů pomocí `npx tailwindcss -i ./static/css/style.css -o ./static/css/output.css --watch`
 
 ## Funkce
 
@@ -24,5 +31,5 @@ Tento projekt je implementací blogu s administrací pomocí Python Backend Fram
 
 ## Licence
 
-Projekt je licencován pod [MIT Licencí](https://github.com/username/repo/blob/master/LICENSE)
+Projekt je licencován pod [MIT Licencí]
 

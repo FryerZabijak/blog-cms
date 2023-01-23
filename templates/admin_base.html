@@ -1,20 +1,26 @@
 {%extends 'base.html'%}
+{% block head %}
+<script src="{{ url_for('static',filename='js/logout.js') }}" defer></script>
+<script src="{{ url_for('static',filename='js/delete.js') }}" defer></script>
+<script src="{{ url_for('static',filename='js/show.js') }}" defer></script>
+<script src="{{ url_for('static',filename='js/edit.js') }}" defer></script>
+{% endblock %} 
 {% block body %}
-<aside class="bg-slate-400 h-auto w-auto shadow-2xl text-white p-1 font-medium">
-  <label class="text-xl">{{ user.login }}</label>
-  {% if user.admin==1 %}
-  <label class="text-gray-200">Admin</label>
+<aside class="bg-emerald-400 h-auto w-auto shadow-2xl p-1 font-medium text-gray-700">
+  <label class="text-xl">{{ current_user.login }}</label>
+  {% if current_user.admin==True %}
+  <label class="">Admin</label>
   {% else %}
   <label>Uživatel</label>
   {% endif %}
   <button
-    class="bg-yellow-500 hover:bg-yellow-400 p-1 shadow-lg rounded-lg"
+    class="text-white bg-yellow-500 hover:bg-yellow-400 p-1 shadow-lg rounded-lg"
     id="logout"
   >
     Odhlásit se
   </button>
   <a
-    class="text-gray-300 hover:text-gray-100"
+    class="hover:text-gray-900"
     href="{{ url_for('admin_users') }}"
     >Uživatelé</a
   >
@@ -22,13 +28,13 @@
 <div class="administration"> {% block admin_body %} {% endblock %}</div>
 <style>
   main {
-    display: flex;
+    display:flex;
     padding: 0 !important;
     margin: 0 !important;
   }
   aside {
-    flex-grow: 1;
-    min-width: 100px;
+    min-width: 140px;
+    width:50%;
     max-width: 200px;
 
     display: flex;
@@ -37,7 +43,7 @@
     align-items: center;
   }
   .administration {
-    flex-grow: 5;
+    width: 100%;
   }
 </style>
 {% endblock %}

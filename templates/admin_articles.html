@@ -2,10 +2,6 @@
 
 {% block title %} Pepův Blog | Administrace články {% endblock %} 
 
-{% block head %}
-<script src="{{ url_for('static',filename='js/logout.js') }}" defer></script>
-{% endblock %} 
-
 {% block admin_body %}
 <h2 class="text-xl font-medium mb-2 text-center">Všechny články</h2>
 <table class="table-auto w-full">
@@ -21,20 +17,20 @@
     <tr class="text-center">
       <td class="border px-4 py-2">{{article.id}}</td>
       <td class="border px-4 py-2">{{article.title}}</td>
-      <td class="border px-4 py-2">{{article.author}}</td>
+      <td class="border px-4 py-2">{{article.author.login}}</td>
       <td class="border px-4 py-2">{{article.views}}</td>
       <td class="border px-1 py-2">
-        <button
+        <button id="delete" article-id="{{article.id}}"
           class="bg-red-500 text-white py-1 px-2 rounded-sm hover:bg-red-600"
         >
           Smazat
         </button>
-        <button
+        <button id="edit" article-id="{{article.id}}"
           class="bg-blue-500 text-white py-1 px-2 rounded-sm hover:bg-blue-600"
         >
           Upravit
         </button>
-        <button
+        <button id="show" article-id="{{article.id}}"
           class="bg-green-500 text-white py-1 px-2 rounded-sm hover:bg-green-600"
         >
           Zobrazit
