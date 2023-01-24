@@ -1,6 +1,6 @@
-{% extends 'admin_base.html' %} 
+{% extends 'admin_base.html' %}
 
-{% block title %} Pepův Blog | Administrace články {% endblock %} 
+{% block title %} Pepův Blog | Administrace články {% endblock %}
 
 {% block admin_body %}
 <h2 class="text-xl font-medium mb-2 text-center">Všechny články</h2>
@@ -22,19 +22,14 @@
       <td class="border px-4 py-2">{{article.views}}</td>
       <td class="border px-4 py-2">{{article.reviews}}</td>
       <td class="border px-1 py-2">
-        <button article-id="{{article.id}}"
-          class="delete bg-red-500 text-white py-1 px-2 rounded-sm hover:bg-red-600"
-        >
+        <button article-id="{{article.id}}" class="delete bg-red-500 text-white py-1 px-2 rounded-sm hover:bg-red-600">
           Smazat
         </button>
-        <button article-id="{{article.id}}"
-          class="edit bg-blue-500 text-white py-1 px-2 rounded-sm hover:bg-blue-600"
-        >
+        <button article-id="{{article.id}}" class="edit bg-blue-500 text-white py-1 px-2 rounded-sm hover:bg-blue-600">
           Upravit
         </button>
         <button article-id="{{article.id}}"
-          class="show bg-green-500 text-white py-1 px-2 rounded-sm hover:bg-green-600"
-        >
+          class="show bg-green-500 text-white py-1 px-2 rounded-sm hover:bg-green-600">
           Zobrazit
         </button>
       </td>
@@ -43,6 +38,7 @@
   </tbody>
 </table>
 <div class="w-full flex justify-center p-4 px-36">
-<button id="create" class="bg-emerald-400 w-1/2 text-white rounded-md p-2 text-center hover:bg-emerald-600">Vytvořit</button>
+  <button id="create"
+    class="bg-emerald-400 w-1/2 text-white rounded-md p-2 text-center hover:bg-emerald-600">Vytvořit</button>
 </div>
 {% endblock %}

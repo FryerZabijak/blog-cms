@@ -1,32 +1,45 @@
 <!DOCTYPE html>
 <html lang="cs">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static',filename='css/output.css') }}"
-    />
-    <title>{% block title %} {% endblock %}</title>
-    {% block head %}{% endblock %}
-  </head>
-  <body>
-    <header class="bg-emerald-600 text-white p-4 flex items-center justify-between">
-        <h1 class="text-2xl font-bold"><a href="{{ url_for('index') }}">Pepův Blog</a></h1>
-        <nav class="flex flex-1 items-center">
-            <ul class="flex ml-8 flex-1 gap-8">
-                <li class="mr-4 hover:text-gray-300"><a href="{{ url_for('index') }}">Domov</a></li>
-                <li class="mr-4 hover:text-gray-300"><a href="{{ url_for('about') }}">O mně</a></li>
-                <li class="mr-4 hover:text-gray-300"><a href="{{ url_for('admin_login') }}">Administrace</a></li>
-            </ul>
-        </nav>
-      </header>
-    <main class="py-6 px-6">
-        {% block body %} {% endblock %}
-    </main>
-    <footer class="bg-gray-200 p-4">
-      <p class="text-center text-gray-600">Copyright © 2023 Pepův Blog</p>
-    </footer>
-  </body>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="{{ url_for('static',filename='css/output.css') }}" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
+    integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <title>{% block title %} {% endblock %}</title>
+  <script src="{{ url_for('static',filename='js/header.js') }}" defer></script>
+  {% block head %}{% endblock %}
+</head>
+
+<body>
+  <header class="bg-emerald-600 text-white p-4 flex items-center justify-between fixed w-full">
+    <h1 class="text-2xl font-bold"><a class="font-mono" href="{{ url_for('index') }}">Pepův Blog</a></h1>
+    <nav class="flex flex-1 items-center">
+      <ul class="flex ml-8 flex-1 gap-8">
+        <li class="mr-4 hover:text-gray-300"><a href="{{ url_for('index') }}">Domov</a></li>
+        <li class="mr-4 hover:text-gray-300"><a href="{{ url_for('about') }}">O mně</a></li>
+        <li class="mr-4 hover:text-gray-300 absolute right-12">
+          <a href="{{ url_for('admin_login') }}">
+          <i class="fa-solid fa-user mr-2"></i>
+          {% if current_user.login %}
+          {{current_user.login}}
+          {% else %}
+          Přihlásit se
+          {% endif %}
+        </a>
+      </li>
+      </ul>
+    </nav>
+  </header>
+  <main class="py-6 px-6">
+    {% block body %} {% endblock %}
+  </main>
+  <footer class="bg-gray-200 p-4">
+    <p class="text-center text-gray-600">Copyright © 2023 Pepův Blog</p>
+  </footer>
+</body>
+
 </html>

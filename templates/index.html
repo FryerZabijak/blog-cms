@@ -1,28 +1,36 @@
 {% extends 'base.html' %}
 {% block head %}
 <style>
-div.article-content {
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
+	div.article-content {
+		display: -webkit-box;
+		-webkit-line-clamp: 2;
+		-webkit-box-orient: vertical;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
 </style>
 
 {% endblock %}
 {% block title %} Pepův Blog {% endblock %}
 {% block body %}
-    <h2 class="text-xl font-medium mb-2">Nejnovější Články:</h3>
-        <div class="container mx-auto p-4">
-            {% for article in articles %}
-              <div class="mb-5 pb-5 border-2 border-white border-b-slate-300">
-                <h2 class="text-3xl font-bold text-blue-500 underline font-serif"><a href="{{ url_for('article',id=article.id) }}">{{article.title}}</a></h2>
-                <p class="">Autor: {{article.author.login}}</p>
-                <p class="">Datum vytvoření: {{article.date_created.strftime('%d.%m.%Y')}}</p>
-                <p class="">Zhlédnutí: {{article.views}}</p>
-                <div class="px-8 py-1 bg-emerald-50 article-content">{{article.content|safe}}</div>
-              </div>
-            {% endfor %}
-          </div>
-{% endblock %}
+<h2 class="text-xl font-medium mb-2">Nejnovější Články:</h3>
+	<div class="container mx-auto p-4">
+		{% for article in articles %}
+		<div class="mb-5 pb-5 border-2 border-white border-b-slate-300">
+			<h2 class="text-3xl font-bold text-blue-500 underline font-serif"><a
+					href="{{ url_for('article',id=article.id) }}">{{article.title}}</a></h2>
+					<div class="flex gap-6 my-4 px-2">
+			<p class=""><i class="fa-solid fa-pencil"></i> {{article.author.login}}</p>
+			<p class=""><i class="fa-solid fa-calendar-days"></i> {{article.date_created.strftime('%d.%m.%Y')}}</p>
+			<p class=""><i class="fa-solid fa-eye"></i> {{article.views}}</p>
+		</div>
+			<div class="px-8 py-1 bg-emerald-50 article-content">{{article.content|safe}}</div>
+			{% if article.thumbnail==None %}
+			<img src="https://picsum.photos/800/400" alt="{{article.title}}" class="m-auto rounded-md my-2">
+			{% else %}
+			<img src="{{article.thumbnail}}" alt="{{article.title}}" class="m-auto">
+			{%endif%}
+		</div>
+		{% endfor %}
+	</div>
+	{% endblock %}

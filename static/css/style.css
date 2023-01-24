@@ -7,11 +7,15 @@ body {
   margin: 0;
 
   display: grid;
-  grid-template-rows: auto 1fr auto;
+  grid-template-rows: 1fr auto;
 }
 
 button, a, input[type="submit"] {
   transition-property: all;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   transition-duration: 150ms;
+}
+
+.tox-notifications-container{
+  display:none;
 }

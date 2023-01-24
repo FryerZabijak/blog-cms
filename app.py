@@ -24,9 +24,14 @@ class Article(db.Model):
     title = db.Column(db.String, nullable=False)
     content = db.Column(db.String, nullable=False)
     author_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    categories = db.Column(db.PickleType, default=["uncategorized"])
+    likes = db.Column(db.PickleType)
+    dislikes = db.Column(db.PickleType)
     date_created = db.Column(db.DateTime, default=datetime.utcnow)
     views = db.Column(db.Integer, default=0)
-    reviews = db.Column(db.Integer, default=0)
+    #reviews = db.Column(db.Integer, default=0)
+    thumbnail = db.Column(db.String)
+    
 
     def __repr__(self):
         return "<Article %r>" % self.id
@@ -68,13 +73,14 @@ def article(id):
     return render_template("article.html",article=article)
 
 
-@app.route("/about")
 @app.route("/aboutus")
 @app.route("/about-us")
 @app.route("/o-mne")
 @app.route("/omne")
 @app.route("/o-nas")
 @app.route("/onas")
+@app.route("/oblogu")
+@app.route("/about")
 def about():
     return render_template("about.html")
 

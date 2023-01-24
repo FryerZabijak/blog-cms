@@ -1,57 +1,44 @@
 {%extends 'base.html'%}
 {% block head %}
-<script src="{{ url_for('static',filename='js/logout.js') }}" defer></script>
-<script src="{{ url_for('static',filename='js/delete.js') }}" defer></script>
-<script src="{{ url_for('static',filename='js/show.js') }}" defer></script>
-<script src="{{ url_for('static',filename='js/edit.js') }}" defer></script>
-<script src="{{ url_for('static',filename='js/cancel.js') }}" defer></script>
-<script src="{{ url_for('static',filename='js/create.js') }}" defer></script>
+<script src="{{ url_for('static',filename='js/admin/logout.js') }}" defer></script>
+<script src="{{ url_for('static',filename='js/admin/delete.js') }}" defer></script>
+<script src="{{ url_for('static',filename='js/admin/show.js') }}" defer></script>
+<script src="{{ url_for('static',filename='js/admin/edit.js') }}" defer></script>
+<script src="{{ url_for('static',filename='js/admin/cancel.js') }}" defer></script>
+<script src="{{ url_for('static',filename='js/admin/create.js') }}" defer></script>
 
 <style>
-  main {
-    display:flex;
-    padding: 0 !important;
-    margin: 0 !important;
-  }
-  aside {
-    min-width: 140px;
-    width:50%;
-    max-width: 200px;
+    main {
+        display: grid;
+        grid-template-columns: 2fr 8fr;
+        gap:16px;
+        padding-bottom: 0 !important;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+        margin: 0 !important;
+    }
 
-    display: flex;
-    flex-direction: column;
-    justify-content: start;
-    align-items: center;
-  }
-  .administration {
-    width: 100%;
-  }
+    aside {
+        display: flex;
+        flex-direction: column;
+        justify-content: start;
+        align-items: center;
+    }
 </style>
-{% endblock %} 
+{% endblock %}
 {% block body %}
 <aside class="bg-emerald-400 h-auto w-auto shadow-2xl p-1 font-medium text-gray-700">
-  <label class="text-xl">{{ current_user.login }}</label>
-  {% if current_user.admin==True %}
-  <label class="">Admin</label>
-  {% else %}
-  <label>Uživatel</label>
-  {% endif %}
-  <button
-    class="text-white bg-yellow-500 hover:bg-yellow-400 p-1 shadow-lg rounded-lg"
-    id="logout"
-  >
-    Odhlásit se
-  </button>
-  <a
-    class="hover:text-gray-900 mt-4"
-    href="{{ url_for('admin_articles') }}"
-    >Články</a
-  >
-  <a
-    class="hover:text-gray-900 mt-4"
-    href="{{ url_for('admin_users') }}"
-    >Uživatelé</a
-  >
+    <label class="text-xl">{{ current_user.login }}</label>
+    {% if current_user.admin==True %}
+    <label class="">Admin</label>
+    {% else %}
+    <label>Uživatel</label>
+    {% endif %}
+    <button class="text-white bg-yellow-500 hover:bg-yellow-400 p-1 shadow-lg rounded-lg" id="logout">
+        Odhlásit se
+    </button>
+    <a class="hover:text-gray-900 mt-4" href="{{ url_for('admin_articles') }}">Články</a>
+    <a class="hover:text-gray-900 mt-4" href="{{ url_for('admin_users') }}">Uživatelé</a>
 </aside>
-<div class="administration"> {% block admin_body %} {% endblock %}</div>
+<div class="administration w-full"> {% block admin_body %} {% endblock %}</div>
 {% endblock %}
