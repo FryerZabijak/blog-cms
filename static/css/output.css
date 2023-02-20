@@ -1005,6 +1005,18 @@ button, a, input[type="submit"] {
   display:none;
 }
 
+h1{
+  font-size: 1.75rem;
+}
+
+h2{
+  font-size: 1.5rem;
+}
+
+h3{
+  font-size: 1.25rem;
+}
+
 .hover\:bg-red-600:hover {
   --tw-bg-opacity: 1;
   background-color: rgb(220 38 38 / var(--tw-bg-opacity));

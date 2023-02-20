@@ -14,11 +14,16 @@ app.secret_key="tentoblogjesuper"
 login_manager = LoginManager(app)
 login_manager.login_view = '/admin/login'
 
-
+#
+# --- Načte aktuálně přihlášeného uživatele
+#
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
-    
+
+#
+# --- Tabulka Článek
+#
 class Article(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String, nullable=False)
@@ -29,13 +34,19 @@ class Article(db.Model):
     dislikes = db.Column(db.PickleType)
     date_created = db.Column(db.DateTime, default=datetime.utcnow)
     views = db.Column(db.Integer, default=0)
-    #reviews = db.Column(db.Integer, default=0)
     thumbnail = db.Column(db.String)
+
+    @property
+    def reviews(self):
+        return sum(self.likes.values()) - sum(self.dislikes.values())
     
 
     def __repr__(self):
         return "<Article %r>" % self.id
 
+#
+# --- Tabulka User
+#
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     login = db.Column(db.String, nullable=False)
@@ -60,11 +71,17 @@ class User(db.Model):
     def __repr__(self):
         return "<User %r>" % self.id
 
+#
+# --- Domovská stránka s články
+#
 @app.route("/")
 def index():
     articles = Article.query.order_by(desc(Article.id)).all()
     return render_template("index.html",articles=articles)
 
+#
+# --- Zobrazí článek podle ID
+#
 @app.route("/article/<int:id>")
 def article(id):
     article = Article.query.filter_by(id=id).first()
@@ -84,12 +101,21 @@ def article(id):
 def about():
     return render_template("about.html")
 
+#
+# --- Pokud se někdo bude snažit do url vecpat admin, automaticky
+# --- ho to přehodí buď do login nebo rovnou administrace
+# --- záleží jestli je přihlášen nebo ne
+#
+@app.route("/admin/")
 @app.route("/admin")
 def admin():
     return redirect("/admin/login")
-
+#
+# --- Přihlašování ---
+#
 @app.route("/admin/login", methods=["GET", "POST"])
 def admin_login():
+    # Pokus o přihlášení - aktivování post
     if request.method == "POST":
         warning=""
         login = request.form["login"]
@@ -105,29 +131,44 @@ def admin_login():
 
 
         return render_template("admin_login.html",warning=warning)
+    # Pokud si zobrazí stránku
     else:
+        # Pokud je přihlášen - zobrazí se mu administrace
         if current_user.is_authenticated:
             return redirect("/admin/articles")
+        # Jinak se mu zobrazí přihlašovací menu
         else:
             return render_template("admin_login.html")
-
+#
+# --- Vypsání všech článků ---
+#
 @app.route("/admin/articles")
 @login_required
 def admin_articles():
     articles = Article.query.order_by(desc(Article.id)).all()
     return render_template("admin_articles.html", articles=articles)
 
+#
+# --- Vypsání všech uživatelů ---
+#
 @app.route("/admin/users")
 @login_required
 def admin_users():
     users = User.query.all()
     return render_template("admin_users.html", users=users)
 
+#
+# --- Odhlášení ---
+#
 @app.route("/admin/logout")
 @login_required
 def admin_logout():
     logout_user()
     return redirect("/")
+
+#
+# --- Mazání článku ---
+#
 
 @app.route("/admin/article/delete=<int:id>")
 @login_required
@@ -136,6 +177,10 @@ def delete_article(id):
     db.session.delete(article)
     db.session.commit()
     return redirect("/admin")
+
+#
+# --- Vytváření a edit článku ---
+#
 
 @app.route("/admin/article/edit/<int:id>", methods=["GET","POST"])
 @app.route("/admin/article/edit", methods=["GET","POST"])
@@ -146,14 +191,18 @@ def edit_article(id=None):
     else:
         article = Article()
     users = User.query.all()
+    # Pokud poprvé zobrazuji
     if request.method == 'GET':
         return render_template("admin_article_edit.html",article=article,users=users)
+    # Ukládání
     elif request.method == "POST":
         article.title = request.form.get("title")
         article.content = request.form.get("content")
         article.author_id = request.form.get("author_id")
+        # Pokud článek existuje, přepíšeme ho
         if id:
             db.session.commit()
+        # Pokud ne, vytvoříme nový
         else:
             db.session.add(article)
             db.session.commit()

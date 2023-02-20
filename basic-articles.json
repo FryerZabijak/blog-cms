@@ -3,12 +3,16 @@
         {
             "title": "Nejlepší programovací článek",
             "content": "Programování je velmi široké téma a existuje mnoho různých způsobů, jak se ho učit a jak se stát dobrým programátorem. Nicméně, jedním z nejlepších způsobů, jak se učit programování, je prostřednictvím projektů. Projekty vám umožní vyzkoušet si různé koncepty a technologie, které jste se naučili, a přidat do svého portfolia něco, co můžete ukázat potenciálním zaměstnavatelům nebo klientům.Dalším důležitým aspektem je učit se různé programovací jazyky. Zatímco se můžete specializovat na jeden jazyk, je užitečné umět alespoň základy několika dalších, abyste byli schopni se přizpůsobit různým projektům a pracovním pozicím.Kromě toho, je důležité se naučit pracovat s verzovacími systémy, jako je Git, a zvyknout si na práci v týmu. Programování není činnost, kterou děláte sami, takže musíte být schopni spolupracovat s ostatními lidmi a řešit problémy společně.Posledním klíčovým aspektem je trpělivost a odhodlání. Programování je těžké a bude existovat mnoho chvil, kdy se budete cítit frustrovaní nebo ztraceni. Je důležité zůstat trpělivý a nevzdat se, protože úspěch přichází s časem a praxí.Abych shrnul, nejlepší způsob, jak se stát dobrým programátorem, je prostřednictvím projektů, učení se různých programovacích jazyků, práce s verzovacími systémy, spolupráce v týmu a trpělivosti a odhodlání.",
-            "author_id": 1
+            "author_id": 1,
+            "likes":10,
+            "dislikes":5
         },
         {
             "title": "Kódování krásou: tajemství strojů oživených",
             "content": "Programování je jako kouzlo, \nco dává život strojům, \njazyky jsou jako kouzelné slovo, \nco dává pokyny těmto strojům. \nS pomocí kódu \nmůžeme dělat divy, \nod automatizace úkolů \naž po tvorbu her a aplikací. \nJe to umění i věda, \ns nekonečnými možnostmi, \nprogramování je klíčem \nk budoucnosti technologií.",
-            "author_id": 2
+            "author_id": 2,
+            "likes":10,
+            "dislikes":5
         }
     ]
 }

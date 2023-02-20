@@ -12,6 +12,6 @@ db.session.add(user)
 data = open("basic-articles.json",encoding="utf-8")
 data = json.load(data)["articles"]
 for article_data in data:
-    article = Article(title=article_data["title"], content=article_data["content"], author_id=article_data["author_id"])
+    article = Article(title=article_data["title"], content=article_data["content"], author_id=article_data["author_id"], likes=article_data["likes"])
     db.session.add(article)
     db.session.commit()
