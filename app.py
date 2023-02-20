@@ -1,4 +1,4 @@
-from flask import Flask, render_template, url_for, request, redirect, session
+from flask import Flask, render_template, url_for, request, redirect, session, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import desc
 from datetime import datetime
@@ -30,16 +30,11 @@ class Article(db.Model):
     content = db.Column(db.String, nullable=False)
     author_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     categories = db.Column(db.PickleType, default=["uncategorized"])
-    likes = db.Column(db.PickleType)
-    dislikes = db.Column(db.PickleType)
+    likes = db.Column(db.PickleType, default=0)
+    dislikes = db.Column(db.PickleType, default=0)
     date_created = db.Column(db.DateTime, default=datetime.utcnow)
     views = db.Column(db.Integer, default=0)
     thumbnail = db.Column(db.String)
-
-    @property
-    def reviews(self):
-        return sum(self.likes.values()) - sum(self.dislikes.values())
-    
 
     def __repr__(self):
         return "<Article %r>" % self.id
@@ -71,6 +66,57 @@ class User(db.Model):
     def __repr__(self):
         return "<User %r>" % self.id
 
+class ArticleRating(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    article_id = db.Column(db.Integer, db.ForeignKey('article.id'), nullable=False)
+    rating = db.Column(db.Integer, nullable=False)
+
+    def __repr__(self):
+        return f"ArticleRating(user_id={self.user_id}, article_id={self.article_id}, rating={self.rating})"
+
+
+@app.route("/article/<int:id>/rating", methods=["POST"])
+@login_required
+def create_rating(id):
+    # zkontrolujte, zda uživatel již rating pro tento článek nevytvořil
+    existing_rating = ArticleRating.query.filter_by(user_id=current_user.id, article_id=id).first()
+    if existing_rating:
+        if existing_rating.rating == request.json.get("rating"):
+            existing_rating.rating = 0
+        else:
+            existing_rating.rating = request.json.get("rating")
+        
+        db.session.commit()
+        return jsonify({"message": "Hodnocení úspěšně změněno."}), 200
+
+    # vytvořte nový rating
+    rating = request.json.get("rating")
+    article_rating = ArticleRating(user_id=current_user.id, article_id=id, rating=rating)
+    db.session.add(article_rating)
+    db.session.commit()
+
+    # aktualizujte počet likes a dislikes v tabulce Article
+    article = Article.query.filter_by(id=id).first()
+    likes = ArticleRating.query.filter_by(article_id=id, rating=1).count()
+    dislikes = ArticleRating.query.filter_by(article_id=id, rating=-1).count()
+    article.likes = likes
+    article.dislikes = dislikes
+    db.session.commit()
+
+    return jsonify({"message": "Rating úspěšně vytvořen."}), 201
+
+
+@app.route("/article/<int:id>/rating", methods=["GET"])
+def get_ratings(id):
+    # získání ratingů pro daný článek
+    ratings = ArticleRating.query.filter_by(article_id=id).all()
+    rating_dict = {}
+    for rating in ratings:
+        rating_dict[rating.user_id] = rating.rating
+    return jsonify(rating_dict)
+
+
 #
 # --- Domovská stránka s články
 #
@@ -85,9 +131,25 @@ def index():
 @app.route("/article/<int:id>")
 def article(id):
     article = Article.query.filter_by(id=id).first()
+    ratings = ArticleRating.query.filter_by(article_id=id).all()
+
     article.views=article.views+1
     db.session.commit()
-    return render_template("article.html",article=article)
+
+    likes = 0
+    dislikes = 0
+    user_rating = None
+
+    if ArticleRating.query.filter_by(article_id=id).first():
+        user_rating = ArticleRating.query.filter_by(article_id=id,user_id=current_user.id).first().rating
+
+        for rating in ratings:
+            if rating.rating == 1:
+                likes += 1
+            elif rating.rating == -1:
+                dislikes += 1
+
+    return render_template("article.html",article=article, likes=likes, dislikes=dislikes, user_rating=user_rating)
 
 
 @app.route("/aboutus")

@@ -1,4 +1,9 @@
 {% extends 'base.html' %}
+
+{% block head %}
+<script src="{{ url_for('static',filename='js/rating.js') }}" defer></script>
+{% endblock %}
+
 {% block title %}
 Pepův Blog | article.title
 {% endblock %}
@@ -18,9 +23,17 @@ Pepův Blog | article.title
       {{article.content|safe}}
     </div>
     <div>
-      <p class="text-gray-600 mb-2">Hodnocení: {{article.reviews}}</p>
-      <button class="bg-green-500 text-white p-2 rounded-md hover:bg-green-600">Líbí se mi</button>
-      <button class="bg-red-500 text-white p-2 rounded-md hover:bg-red-600">Nelíbí se mi</button>
+      <p class="text-gray-600 mb-2">Hodnocení: <label id="final-rating">{{likes - dislikes}}</label> (Zvolil jste
+        {% if user_rating==1 %}
+        <label class="text-green-500">Líbí se mi</label>)
+        {% elif user_rating==-1 %}
+        <label class="text-red-500">Nelíbí se mi</label>)
+        {% else %}
+        <label>Nic</label>)
+        {% endif %}
+      </p>
+      <button btn-type="like" class="bg-green-500 text-white p-2 rounded-md hover:bg-green-600">Líbí se mi</button>
+      <button btn-type="dislike" class="bg-red-500 text-white p-2 rounded-md hover:bg-red-600">Nelíbí se mi</button>
     </div>
   </div>
 </div>
