@@ -1,6 +1,4 @@
-# Blog s administrací
-
-Tento projekt je implementací blogu s administrací pomocí Python Backend Frameworku Flask a jako CSS Framework použit TailwindCSS.
+# Blog CMS s administrací
 
 ## Instalace
 
